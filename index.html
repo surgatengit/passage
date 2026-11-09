@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="es" data-skin="lectura">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f4ec">
+<meta name="description" content="PASSAGE: contraseñas con palabras elegidas al azar. Una herramienta privada, fácil de leer y con un laboratorio interactivo WPA2 y NetNTLMv2.">
+<title>PASSAGE · Contraseñas que puedes decir</title>
+<style>
+:root{
+  --paper:#f6f4ec;--sheet:#fffefa;--ink:#1c2a25;--muted:#526158;--subtle:#69756a;--rule:#bdc6b7;
+  --forest:#245542;--forest-ink:#ffffff;--wash:#e9eee5;--wash-deep:#dbe5d9;--rose:#ae563c;--gold:#d4ae68;
+  --focus:#bb5530;--link:#245542;--radius:4px;--display:Georgia,"Iowan Old Style","Baskerville",serif;
+  --body:"Aptos","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"Cascadia Code","SFMono-Regular",Consolas,monospace;color-scheme:light;
+  font-size:18px;
+}
+:root[data-skin="omarchy"]{
+  --paper:#121512;--sheet:#1a1e1a;--ink:#e9eae1;--muted:#b4bcb0;--subtle:#a0ad9f;--rule:#485348;
+  --forest:#b5d39e;--forest-ink:#111b13;--wash:#222922;--wash-deep:#303d30;--rose:#e0a67d;--gold:#c8bb8e;
+  --focus:#f1be81;--link:#c0dbab;--radius:1px;
+  --display:"Aptos","Segoe UI",system-ui,sans-serif;--body:"Aptos","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+:root[data-size="large"]{font-size:21px}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:6rem}
+body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.65 var(--body);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+a{color:var(--link);text-underline-offset:3px}
+[hidden]{display:none!important}
+.wrap{max-width:1140px;margin:auto;padding:0 clamp(18px,3.4vw,45px)}
+.sitebar{border-bottom:1px solid var(--rule);background:var(--paper)}
+.sitebar>.wrap{display:flex;align-items:center;justify-content:space-between;min-height:77px;gap:18px}
+.brand{text-decoration:none;color:var(--ink);font:800 1.08rem/1 var(--body);letter-spacing:-.045em;white-space:nowrap}
+.brand i{display:inline-block;width:9px;height:9px;background:var(--forest);margin-right:7px;vertical-align:3px;transform:rotate(45deg)}
+.brand small{color:var(--muted);font:.67rem var(--mono);letter-spacing:0;margin-left:15px;white-space:nowrap}
+.appearance{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.appearance>.hint{color:var(--muted);font:.74rem var(--body)}
+.skinseg{display:flex;border:1px solid var(--rule);gap:2px;padding:3px;background:var(--sheet)}
+.skinseg button{min-height:39px;padding:5px 13px;border:0;background:transparent;color:var(--muted);font:.75rem var(--body)}
+.skinseg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.sizebtn{min-height:47px;min-width:53px;border:1px solid var(--rule);background:transparent;font-weight:700;font-size:.9rem}
+.intro{padding:clamp(28px,5vw,63px) 0 clamp(22px,3.4vw,40px)}
+.eyebrow{font:.72rem/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--forest)}
+h1,h2,h3,p{margin-top:0}
+h1{font:normal clamp(2.15rem,4.25vw,3.7rem)/1.1 var(--display);letter-spacing:-.048em;max-width:17ch;margin:18px 0 15px}
+h1 em{font-style:italic;color:var(--forest);font-weight:normal}
+.intro-row{display:flex;align-items:end;justify-content:space-between;gap:40px}
+.intro p{color:var(--muted);max-width:40ch;line-height:1.6;font-size:1.03rem;margin:0 0 6px}
+.piece-label{font:.74rem var(--mono);color:var(--muted);white-space:nowrap;letter-spacing:.035em}
+.app{background:var(--sheet);border:1px solid var(--rule);border-top:3px solid var(--forest);box-shadow:0 16px 40px rgba(23,43,30,.035)}
+.app-top{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:18px clamp(19px,3.3vw,37px);border-bottom:1px solid var(--rule)}
+.app-top h2{font:700 1rem var(--body);letter-spacing:-.025em;margin:0}
+.private{color:var(--muted);font:.72rem var(--body);display:inline-flex;gap:8px;align-items:center;text-align:right}
+.private:before{content:"";display:inline-block;width:8px;height:8px;background:var(--forest);border-radius:50%;flex:none}
+.quick{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px 22px;padding:23px clamp(19px,3.3vw,37px);border-bottom:1px solid var(--rule)}
+.quick label{font-weight:650;font-size:.94rem}
+.wordchooser{display:flex;gap:5px;flex-wrap:wrap}
+.wordchooser button,.segment button{min-width:49px;min-height:49px;border:1px solid var(--rule);background:transparent;color:var(--ink);border-radius:var(--radius);font-weight:600}
+.wordchooser button[aria-pressed="true"],.segment button[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:var(--forest-ink)}
+.wordchooser button:hover:not([aria-pressed="true"]),.segment button:hover:not([aria-pressed="true"]){background:var(--wash)}
+.stage{padding:clamp(22px,4vw,49px) clamp(19px,4vw,53px) 35px;min-height:260px;position:relative}
+.stage:before{content:"01";position:absolute;top:24px;right:clamp(19px,4vw,53px);font:normal 3.2rem/1 var(--display);color:var(--wash-deep);pointer-events:none}
+.stage-kicker{font:.73rem var(--mono);letter-spacing:.06em;color:var(--muted);margin-bottom:20px}
+.hero-pass{font:normal clamp(1.55rem,2.75vw,2.55rem)/1.65 var(--display);letter-spacing:-.016em;overflow-wrap:anywhere;position:relative;max-width:960px;margin:0 0 26px}
+.hero-pass .w{color:var(--ink)}.hero-pass .s{color:var(--rose);margin:0 .045em}.hero-pass .n{color:var(--forest);font-weight:700}
+.stage-actions{display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin-bottom:23px}
+.action-primary,.action-secondary{min-height:57px;border-radius:var(--radius);padding:11px 24px;font-weight:750;font-size:.94rem}
+.action-primary{border:1px solid var(--forest);background:var(--forest);color:var(--forest-ink)}
+.action-primary:hover{filter:brightness(.93)}
+.action-secondary{background:transparent;color:var(--ink);border:1px solid var(--rule)}
+.action-secondary:hover{background:var(--wash)}
+#strength{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:var(--muted)}
+#strength b{font-size:1rem;color:var(--ink)}
+#strength button{border:0;background:transparent;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px;color:var(--link);padding:7px;font-weight:600}
+.entropyNote{color:var(--muted);max-width:73ch;margin:15px 0 0;font-size:.87rem}
+.entropyNote strong{color:var(--ink)}
+.others{border-top:1px solid var(--rule)}
+.others-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:20px clamp(19px,3.3vw,37px) 11px}
+.others-head h3{font:700 .94rem var(--body);margin:0}.others-head .small{font:.75rem var(--body);color:var(--muted)}
+.copyall{border:0;background:transparent;color:var(--link);font-weight:650;min-height:40px;text-decoration:underline;text-underline-offset:4px;padding:5px 0}
+.list{list-style:none;padding:0 clamp(19px,3.3vw,37px) 15px;margin:0}
+.list li{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--rule);min-height:63px}
+.list .number{font:.69rem var(--mono);color:var(--muted);min-width:2ch}
+.list .pw{flex:1;min-width:0;font:normal 1.03rem/1.6 var(--body);overflow-wrap:anywhere}
+.list .pw .s{color:var(--rose)}.list .pw .n{color:var(--forest);font-weight:700}
+.copymini{min-width:77px;min-height:42px;padding:4px 8px;border:1px solid var(--rule);border-radius:var(--radius);background:transparent;font-size:.78rem;font-weight:600;flex:none}
+.copymini:hover{background:var(--wash)}
+.more-wrap{border-top:1px solid var(--rule);background:var(--wash)}
+.foldhead{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:21px clamp(19px,3.3vw,37px);cursor:pointer;font-weight:700;font-size:.98rem}
+.foldhead::-webkit-details-marker{display:none}
+.foldhead:after{content:"+";font:normal 1.5rem/1 var(--body);color:var(--forest)}
+details[open]>.foldhead:after{content:"−"}
+.foldhead small{display:block;color:var(--muted);font-weight:400;font-size:.78rem;margin-top:4px}
+.advanced{border-top:1px solid var(--rule);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;padding:8px clamp(19px,3.3vw,37px) 28px}
+.field{padding:16px 0;border-bottom:1px solid var(--rule);min-width:0}
+.field-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.field-head label,.field-head strong,.field>label{font-weight:700;font-size:.9rem}
+.help{color:var(--muted);font-size:.79rem;margin:6px 0 0;line-height:1.55}
+.segment{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.segment button{font-size:.8rem;min-height:45px;padding:6px 12px;min-width:46px}
+.field .segment button[data-v="fixed"],.field .segment button[data-v="random"]{padding:6px 15px}
+input[type="text"],input[type="number"],select{background:var(--sheet);border:1px solid var(--rule);color:var(--ink);border-radius:var(--radius);min-height:47px;padding:8px 11px;max-width:100%}
+.textin{width:100%;margin-top:10px;font-family:var(--mono);font-size:.85rem}
+.toggle{position:relative;display:inline-flex;align-items:center;min-width:55px;min-height:34px;cursor:pointer}
+.toggle input{position:absolute;opacity:0;width:100%;height:100%;cursor:pointer}
+.toggle span{display:block;width:55px;height:31px;background:var(--rule);border-radius:20px;transition:background .18s;position:relative}
+.toggle span:after{content:"";position:absolute;left:4px;top:4px;width:23px;height:23px;background:var(--sheet);border-radius:50%;transition:transform .18s}
+.toggle input:checked+span{background:var(--forest)}.toggle input:checked+span:after{transform:translateX(24px);background:var(--forest-ink)}
+.toggle input:focus-visible+span{outline:3px solid var(--focus);outline-offset:4px}
+.stepper{display:flex;align-items:center;gap:0;border:1px solid var(--rule);height:47px}
+.stepper button{width:42px;height:43px;border:0;background:transparent;font-size:1.25rem}
+.stepper input{border:0;border-left:1px solid var(--rule);border-right:1px solid var(--rule);width:62px;height:43px;text-align:center;min-height:0;background:transparent;padding:0;appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none}
+.alert{border-top:1px solid var(--rule);padding:10px clamp(19px,3.3vw,37px);font-size:.79rem;color:var(--muted)}
+.alert.warn{color:var(--rose)}
+.section{margin:clamp(54px,7vw,92px) 0 0}
+.section-mark{font:.72rem var(--mono);color:var(--forest);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.section-title{font:normal clamp(1.65rem,3.2vw,2.65rem)/1.22 var(--display);letter-spacing:-.04em;margin:0 0 15px}
+.section-lead{font-size:1rem;color:var(--muted);max-width:65ch;margin-bottom:23px}
+.inquiry{border-top:2px solid var(--ink);border-bottom:1px solid var(--rule)}
+.inquiry-top{padding:25px 0 18px}.inquiry-top h2{max-width:21ch}
+.quiz-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 24px}
+.quiz-tabs button{min-height:48px;padding:9px 16px;border:1px solid var(--rule);background:transparent;border-radius:100px;font-weight:650;font-size:.83rem}
+.quiz-tabs button[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.quiz-answer{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(250px,.85fr);gap:32px;padding:8px 0 33px}
+.quiz-answer h3{font:normal 1.55rem/1.2 var(--display);letter-spacing:-.025em;margin:0 0 12px}
+.quiz-answer p{color:var(--muted);font-size:.95rem;max-width:49ch;margin:0}
+.quiz-number{border-left:1px solid var(--rule);padding:4px 0 0 26px;align-self:center}
+.quiz-number .big{display:block;font:normal clamp(2rem,4vw,3.3rem)/1.15 var(--display);letter-spacing:-.05em;color:var(--forest)}
+.quiz-number small{display:block;color:var(--muted);font-size:.8rem;margin-top:8px}
+.readmore{background:var(--sheet);border:1px solid var(--rule)}
+.readmore summary{list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center;padding:27px clamp(20px,3vw,36px);cursor:pointer}
+.readmore summary::-webkit-details-marker{display:none}
+.readmore summary::after{content:"↗";font-size:1.6rem;color:var(--forest);flex:none}
+.readmore[open]>summary::after{content:"↘"}
+.readmore summary strong{display:block;font:normal 1.5rem var(--display);letter-spacing:-.03em}
+.readmore summary small{display:block;color:var(--muted);font-size:.85rem;font-weight:400;max-width:66ch;margin-top:7px}
+.lab-inner{padding:8px clamp(20px,3vw,36px) 34px;border-top:1px solid var(--rule)}
+.lab-intro{margin:24px 0 16px;color:var(--muted);font-size:.89rem;max-width:68ch}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.metric{padding:25px 19px 25px 0}.metric+.metric{border-left:1px solid var(--rule);padding-left:27px}
+.metric small{display:block;color:var(--muted);font-size:.74rem;margin-bottom:9px}
+.metric b{font:normal clamp(1.5rem,2.65vw,2.3rem)/1.13 var(--display);letter-spacing:-.045em}
+.metric em{font-style:normal;color:var(--forest);font-weight:650}
+.lab-chooser{margin:24px 0}.lab-chooser .segment{margin-top:12px}
+.lab-output{border-top:1px solid var(--rule);padding:22px 0}
+.lab-output .eyebrow{margin-bottom:12px}
+.lab-output .estimate{font:normal clamp(1.65rem,3.7vw,2.8rem)/1.2 var(--display);letter-spacing:-.035em;overflow-wrap:anywhere;margin-bottom:9px}
+.lab-output p{color:var(--muted);font-size:.85rem;max-width:68ch;margin-bottom:10px}
+.lab-output dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:7px 17px;font-size:.84rem;margin:17px 0 0}
+.lab-output dt{color:var(--muted)}.lab-output dd{margin:0;overflow-wrap:anywhere;font-weight:650}
+.lab-inline{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:17px 0}
+.lab-inline input{width:148px;font-family:var(--mono);font-size:.85rem}.lab-inline select{font-size:.85rem}
+.lab-inline button{min-height:47px;border:1px solid var(--rule);padding:8px 13px;background:transparent;font-size:.8rem}
+.lab-history{font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:20px;margin-top:12px}
+.lab-history strong{color:var(--ink)}
+.lab-history code{font:.79rem/1.7 var(--mono);background:var(--wash);padding:3px 5px;overflow-wrap:anywhere}
+.footnote{font-size:.83rem;color:var(--muted);padding:25px 0 0;max-width:80ch}
+.simple-accordion{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-top:22px}
+.simple-accordion summary{font-weight:700;cursor:pointer;list-style:none;padding:24px 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.simple-accordion summary::after{content:"+";font:1.6rem var(--body)}.simple-accordion[open] summary::after{content:"−"}
+.simple-accordion summary::-webkit-details-marker{display:none}
+.simple-accordion .content{max-width:72ch;color:var(--muted);padding:0 0 22px;font-size:.93rem}
+.simple-accordion .content p{margin-bottom:12px}
+.sitefoot{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--rule);padding:36px 0 58px;margin-top:65px;font-size:.76rem;color:var(--muted)}
+.sitefoot strong{font-weight:800;color:var(--ink);font-size:.98rem;letter-spacing:-.04em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+html[data-skin="omarchy"] body{background-image:linear-gradient(to right, transparent calc(50% - 570px),#2c332c calc(50% - 570px),#2c332c calc(50% - 569px),transparent calc(50% - 569px)),linear-gradient(to right, transparent calc(50% + 569px),#2c332c calc(50% + 569px),#2c332c calc(50% + 570px),transparent calc(50% + 570px));background-repeat:no-repeat}
+html[data-skin="omarchy"] .eyebrow,html[data-skin="omarchy"] .section-mark{font-family:var(--mono)}
+html[data-skin="omarchy"] .app{box-shadow:none}
+html[data-skin="omarchy"] .brand small{color:var(--forest)}
+html[data-skin="omarchy"] .hero-pass,html[data-skin="omarchy"] .list .pw{font-family:var(--mono);letter-spacing:-.055em}
+html[data-skin="omarchy"] .quiz-tabs button{border-radius:1px}
+html[data-skin="omarchy"] .quiz-number .big,html[data-skin="omarchy"] .metric b{font-family:var(--mono);font-weight:500}
+html[data-skin="omarchy"] h1 em{font-style:normal;font-weight:700}
+@media(max-width:760px){
+ .sitebar>.wrap{min-height:70px}.brand small,.appearance>.hint,.piece-label{display:none}
+ .intro-row{display:block}.intro p{max-width:48ch}
+ .quick{align-items:flex-start}.stage{min-height:0}.stage:before{font-size:2.3rem}
+ .advanced{grid-template-columns:1fr}.quiz-answer{grid-template-columns:1fr;gap:14px}.quiz-number{border-left:0;border-top:1px solid var(--rule);padding:18px 0 0}
+}
+@media(max-width:465px){
+ .sitebar>.wrap{gap:8px}.brand{font-size:.98rem}.appearance{gap:6px}.skinseg button{padding:5px 9px;font-size:.7rem}.sizebtn{min-width:43px}
+ .intro{padding-top:28px}h1{font-size:2.08rem}.quick{padding-top:18px}.wordchooser button{min-width:42px;min-height:47px}
+ .stage{padding-top:23px}.hero-pass{font-size:1.42rem;line-height:1.9}.stage-actions{align-items:stretch}.action-primary,.action-secondary{flex:1;min-width:150px}
+ .list li{align-items:flex-start}.list .pw{font-size:.96rem}.list .number{padding-top:10px}
+ .metrics{grid-template-columns:1fr}.metric+.metric{border-left:0;border-top:1px solid var(--rule);padding:19px 0}.metric{padding:19px 0}
+ .sitefoot{align-items:start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="sitebar">
+  <div class="wrap">
+    <a class="brand" href="#generador" aria-label="PASSAGE, ir al generador"><i aria-hidden="true"></i>PASSAGE <small>herramientas que se entienden</small></a>
+    <div class="appearance" aria-label="Preferencias de lectura">
+      <span class="hint">Apariencia</span>
+      <div class="skinseg" role="group" aria-label="Elegir apariencia"><button id="skinLectura" type="button" aria-pressed="true">Lectura</button><button id="skinOmarchy" type="button" aria-pressed="false">Omarchy</button></div>
+      <button class="sizebtn" id="textSize" type="button" aria-label="Aumentar el tamaño del texto" title="Tamaño de letra: normal">A+</button>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="intro">
+    <div class="eyebrow">Una herramienta personal · sin cuentas ni servidores</div>
+    <div class="intro-row">
+      <h1>Fácil de decir.<br><em>Difícil de adivinar.</em></h1>
+      <p>Para esas veces en que no puedes copiar y pegar: tienes que dictar una clave, apuntarla o recordarla. Palabras normales, elegidas de una forma nada normal: <strong>al azar.</strong></p>
+    </div>
+  </section>
+  <section class="app" id="generador" aria-labelledby="genTitle">
+    <div class="app-top"><h2 id="genTitle">El generador</h2><span class="private">Privado: funciona en este navegador</span></div>
+    <div class="quick"><label>¿Cuántas palabras quieres?</label><div class="wordchooser" id="words" role="group" aria-label="Palabras por contraseña"><button type="button" data-v="2" aria-pressed="false">2</button><button type="button" data-v="3" aria-pressed="false">3</button><button type="button" data-v="4" aria-pressed="false">4</button><button type="button" data-v="5" aria-pressed="true">5</button><button type="button" data-v="6" aria-pressed="false">6</button><button type="button" data-v="7" aria-pressed="false">7</button></div></div>
+    <div class="stage">
+      <div class="stage-kicker">UNA PROPUESTA, SOLO PARA TI</div>
+      <div class="hero-pass" id="featured" aria-label="Contraseña generada"></div>
+      <div class="stage-actions"><button type="button" class="action-primary" id="go">↻ Generar nuevas</button><button type="button" class="action-secondary" id="copyFeatured">Copiar esta contraseña</button></div>
+      <div id="strength"><span>Azar de este generador</span><b id="strBits">—</b><span id="strLabel"></span><button type="button" id="whyEntropy" aria-expanded="false" aria-controls="entropyNote">¿Cómo se calcula?</button></div>
+      <div class="entropyNote" id="entropyNote" hidden><strong>Las palabras son lo importante.</strong> Se eligen independientemente con un generador criptográfico entre 2.048 opciones. Una inicial siempre mayúscula o un punto siempre igual no añaden incertidumbre. Esta cifra describe el procedimiento de generación, no analiza una contraseña escrita por una persona.</div>
+    </div>
+    <div class="others" id="othersPanel">
+      <div class="others-head"><div><h3>Más propuestas</h3><div class="small">Otra opción si la primera no te gusta, sin elegir palabras a mano.</div></div><button type="button" class="copyall" id="copyAll">Copiar todas</button></div>
+      <ol class="list" id="list"></ol>
+    </div>
+    <details class="more-wrap" id="advancedDetails"><summary class="foldhead"><span>Ajustar el formato<small>Punto fijo, mayúsculas, cifras, tildes y cantidad</small></span></summary>
+      <div class="advanced">
+        <div class="field"><div class="field-head"><label for="count">Cuántas propuestas</label><div class="stepper"><button id="minus" type="button" aria-label="Una propuesta menos">−</button><input id="count" type="number" min="1" max="50" value="5"><button id="plus" type="button" aria-label="Una propuesta más">+</button></div></div><p class="help">De 1 a 50. La primera aparece en grande.</p></div>
+        <div class="field"><div class="field-head"><label for="useSym">Separar las palabras</label><label class="toggle"><input id="useSym" type="checkbox" checked><span></span></label></div><p class="help">El punto fijo es fácil de dictar. Si siempre se usa, no añade azar.</p><div id="separatorControls"><div class="segment" id="sepMode" role="group" aria-label="Tipo de separador"><button type="button" data-v="fixed" aria-pressed="true">Punto fijo</button><button type="button" data-v="random" aria-pressed="false">Aleatorios</button></div><div id="symBox" hidden><label for="symSet" class="help">Símbolos permitidos</label><input class="textin" id="symSet" type="text" value="!@#$%&amp;*?-_.+=" spellcheck="false" autocomplete="off"><p class="help" id="symErr" hidden>Introduce al menos un símbolo para continuar.</p></div></div></div>
+        <div class="field"><div class="field-head"><label for="useNum">Añadir números</label><label class="toggle"><input id="useNum" type="checkbox" checked><span></span></label></div><p class="help">Cifras aleatorias detrás de una palabra seleccionada al azar.</p><div id="numBox"><div class="segment" id="digits" role="group" aria-label="Número de cifras"><button type="button" data-v="1" aria-pressed="false">1</button><button type="button" data-v="2" aria-pressed="true">2</button><button type="button" data-v="3" aria-pressed="false">3</button><button type="button" data-v="4" aria-pressed="false">4</button></div></div></div>
+        <div class="field"><div class="field-head"><label for="useCap">Mayúscula inicial</label><label class="toggle"><input id="useCap" type="checkbox" checked><span></span></label></div><p class="help">La primera letra de cada palabra en mayúscula. Es comodidad visual, no azar adicional si siempre se hace.</p></div>
+        <div class="field"><div class="field-head"><label for="plain">Sin tildes ni ñ</label><label class="toggle"><input id="plain" type="checkbox" checked><span></span></label></div><p class="help">Útil para teclados, dictado y redes Wi-Fi. Mantiene las palabras fáciles de escribir.</p></div>
+      </div>
+    </details>
+    <div class="alert" id="wifiValidity" aria-live="polite"></div>
+    <div id="copyMessage" class="sr" aria-live="polite"></div>
+  </section>
+  <section class="section" aria-labelledby="curiousTitle" id="entender">
+    <div class="section-mark">Lo curioso · explóralo</div>
+    <div class="inquiry"><div class="inquiry-top"><h2 class="section-title" id="curiousTitle">¿Qué hace de verdad más difícil adivinar una clave?</h2><p class="section-lead">Elige una idea. No hace falta leer una explicación larga para descubrirlo.</p></div>
+      <div class="quiz-tabs" id="quizTabs" role="group" aria-label="Explorar factores de seguridad"><button type="button" data-v="capital" aria-pressed="false">Poner mayúsculas</button><button type="button" data-v="dot" aria-pressed="false">Separar por puntos</button><button type="button" data-v="word" aria-pressed="true">Añadir una palabra</button></div>
+      <div class="quiz-answer" aria-live="polite"><div><h3 id="quizTitle">Una palabra cambia la escala.</h3><p id="quizText"></p></div><div class="quiz-number"><span class="big" id="quizNumber">×2.048</span><small id="quizNote">más combinaciones posibles</small></div></div>
+    </div>
+    <div class="footnote">Una contraseña que elijas tú por recuerdos, nombres o frases conocidas no tiene necesariamente estas probabilidades. Aquí se mide el azar del <em>generador</em>, no lo complicada que parece una palabra.</div>
+  </section>
+  <section class="section" id="laboratorio" aria-labelledby="labSectionTitle">
+    <div class="section-mark">Si te apetece ir más allá</div>
+    <h2 class="section-title" id="labSectionTitle">¿Cuánto tardaría en encontrarse?</h2>
+    <p class="section-lead">La misma contraseña puede resistir de forma muy distinta según cómo se compruebe. En este laboratorio puedes cambiar el escenario y verlo.</p>
+    <details class="readmore" id="labDetails"><summary><span><strong>Abrir el laboratorio</strong><small>Dos mediciones reales de una RTX 3060 · WPA2 y NetNTLMv2 · doce caracteres · palabras aleatorias</small></span></summary>
+      <div class="lab-inner">
+        <p class="lab-intro">Mediciones de una RTX 3060 con Hashcat 8.0.0 (9 de noviembre de 2026). Los tiempos se calculan a partir de la velocidad indicada; no son garantías y una máscara predecible puede acortar mucho la búsqueda.</p>
+        <div class="metrics"><div class="metric"><small>WPA2 · prueba de laboratorio</small><b>367,4 <em>kH/s</em></b></div><div class="metric"><small>NetNTLMv2 · benchmark</small><b>1.576,1 <em>MH/s</em></b></div></div>
+        <div class="lab-chooser"><strong>Escenario que quieres analizar</strong><div class="segment" id="protocols" role="group" aria-label="Tipo de hash"><button type="button" data-v="wpa2" aria-pressed="true">Wi-Fi WPA2</button><button type="button" data-v="netntlmv2" aria-pressed="false">NetNTLMv2</button></div></div>
+        <div class="lab-output"><div class="eyebrow">Tu frase · el formato del generador</div><div class="estimate" id="phraseTime">—</div><p>Tiempo teórico para recorrer todo el espacio de la configuración actual, si quien intenta adivinar conoce la lista de palabras y las reglas. No se recupera la contraseña aquí.</p><dl><dt>Posibilidades</dt><dd id="phraseCombos">—</dd><dt>Promedio idealizado</dt><dd id="phraseAvg">—</dd><dt>Escenario</dt><dd id="phraseProtocol">—</dd></dl></div>
+        <div class="lab-chooser"><strong>Comparémoslo con 12 caracteres aleatorios</strong><div class="segment" id="charsets" role="group" aria-label="Caracteres posibles"><button type="button" data-v="26" aria-pressed="false">Solo minúsculas</button><button type="button" data-v="62" aria-pressed="false">Letras y cifras</button><button type="button" data-v="95" aria-pressed="true">ASCII imprimible</button></div></div>
+        <div class="lab-output"><div class="eyebrow">Doce caracteres · el peor caso teórico</div><div class="estimate" id="bruteTime">—</div><p>Doce caracteres de longitud no garantizan este resultado. El cálculo presupone doce elecciones independientes y uniformes dentro del conjunto indicado.</p><dl><dt>Posibilidades</dt><dd id="bruteCombos">—</dd><dt>Azar estimado</dt><dd id="bruteBits">—</dd></dl></div>
+        <details class="simple-accordion"><summary>Ajustar la velocidad de prueba</summary><div class="content"><p>Introduce otro rendimiento si cambias de GPU. Cada escenario guarda su valor mientras la página siga abierta.</p><div class="lab-inline"><input id="speedValue" type="text" inputmode="decimal" aria-label="Valor de la velocidad" value="367400"><select id="speedUnit" aria-label="Unidad de la velocidad"><option value="1">H/s</option><option value="1000">kH/s</option><option value="1000000">MH/s</option><option value="1000000000">GH/s</option></select><button type="button" id="resetSpeed">Restablecer</button></div><p id="speedInfo">—</p><p>Velocidad empleada: <strong id="speedLabel">—</strong></p></div></details>
+        <div class="lab-history"><strong>Lo que sucedió en la demo WPA2.</strong> Se probaron 19.209.960 candidatas en una sesión de 52 segundos; se resolvió 1 de 2 registros EAPOL y después terminó en <code>Exhausted</code>. Eso no implica que existieran dos contraseñas diferentes. El benchmark NetNTLMv2 únicamente midió rendimiento con <code>.\hashcat.exe -b -m 5600 -D 2</code>.</div>
+      </div>
+    </details>
+  </section>
+  <section class="section" id="sobre"><div class="section-mark">Un poco de contexto, por si sirve</div>
+    <details class="simple-accordion"><summary>¿De dónde salen las 2.048 palabras?</summary><div class="content"><p>El diccionario integrado procede de la lista española BIP-39. Las palabras se seleccionan con <code>crypto.getRandomValues()</code>, no con <code>Math.random()</code>. Es un enfoque de frases de paso comparable en espíritu a Diceware, pero no es la lista de la EFF ni un generador de frases gramaticales.</p><p>Los separadores y la capitalización solo cuentan como azar si se eligen aleatoriamente. Lo que aporta resistencia es el número de elecciones posibles y que no puedas anticiparlas.</p></div></details>
+    <details class="simple-accordion"><summary>¿Cuándo recomiendo una frase de palabras?</summary><div class="content"><p>Cuando tienes que escribir, dictar o recordar una clave sin acceso cómodo a un gestor. Para cuentas de alto valor, el gestor de contraseñas, las claves de acceso (passkeys) y la autenticación multifactor siguen siendo opciones preferentes cuando estén disponibles.</p><p>Evita reutilizar frases, no inventes una frase con palabras relacionadas entre sí y comprueba las restricciones del servicio. Una contraseña Wi-Fi WPA2-PSK admite normalmente 8 a 63 caracteres ASCII; la página avisa si alguna propuesta no encaja.</p></div></details>
+  </section>
+  <footer class="sitefoot"><strong>PASSAGE.</strong><span>El azar se genera aquí. Ni cuentas ni registro de contraseñas.</span><a href="#generador">Volver al generador ↑</a></footer>
+</main>
+<script>
+const WORDS = ["ábaco","abdomen","abeja","abierto","abogado","abono","aborto","abrazo","abrir","abuelo","abuso","acabar","academia","acceso","acción","aceite","acelga","acento","aceptar","ácido","aclarar","acné","acoger","acoso","activo","acto","actriz","actuar","acudir","acuerdo","acusar","adicto","admitir","adoptar","adorno","aduana","adulto","aéreo","afectar","afición","afinar","afirmar","ágil","agitar","agonía","agosto","agotar","agregar","agrio","agua","agudo","águila","aguja","ahogo","ahorro","aire","aislar","ajedrez","ajeno","ajuste","alacrán","alambre","alarma","alba","álbum","alcalde","aldea","alegre","alejar","alerta","aleta","alfiler","alga","algodón","aliado","aliento","alivio","alma","almeja","almíbar","altar","alteza","altivo","alto","altura","alumno","alzar","amable","amante","amapola","amargo","amasar","ámbar","ámbito","ameno","amigo","amistad","amor","amparo","amplio","ancho","anciano","ancla","andar","andén","anemia","ángulo","anillo","ánimo","anís","anotar","antena","antiguo","antojo","anual","anular","anuncio","añadir","añejo","año","apagar","aparato","apetito","apio","aplicar","apodo","aporte","apoyo","aprender","aprobar","apuesta","apuro","arado","araña","arar","árbitro","árbol","arbusto","archivo","arco","arder","ardilla","arduo","área","árido","aries","armonía","arnés","aroma","arpa","arpón","arreglo","arroz","arruga","arte","artista","asa","asado","asalto","ascenso","asegurar","aseo","asesor","asiento","asilo","asistir","asno","asombro","áspero","astilla","astro","astuto","asumir","asunto","atajo","ataque","atar","atento","ateo","ático","atleta","átomo","atraer","atroz","atún","audaz","audio","auge","aula","aumento","ausente","autor","aval","avance","avaro","ave","avellana","avena","avestruz","avión","aviso","ayer","ayuda","ayuno","azafrán","azar","azote","azúcar","azufre","azul","baba","babor","bache","bahía","baile","bajar","balanza","balcón","balde","bambú","banco","banda","baño","barba","barco","barniz","barro","báscula","bastón","basura","batalla","batería","batir","batuta","baúl","bazar","bebé","bebida","bello","besar","beso","bestia","bicho","bien","bingo","blanco","bloque","blusa","boa","bobina","bobo","boca","bocina","boda","bodega","boina","bola","bolero","bolsa","bomba","bondad","bonito","bono","bonsái","borde","borrar","bosque","bote","botín","bóveda","bozal","bravo","brazo","brecha","breve","brillo","brinco","brisa","broca","broma","bronce","brote","bruja","brusco","bruto","buceo","bucle","bueno","buey","bufanda","bufón","búho","buitre","bulto","burbuja","burla","burro","buscar","butaca","buzón","caballo","cabeza","cabina","cabra","cacao","cadáver","cadena","caer","café","caída","caimán","caja","cajón","cal","calamar","calcio","caldo","calidad","calle","calma","calor","calvo","cama","cambio","camello","camino","campo","cáncer","candil","canela","canguro","canica","canto","caña","cañón","caoba","caos","capaz","capitán","capote","captar","capucha","cara","carbón","cárcel","careta","carga","cariño","carne","carpeta","carro","carta","casa","casco","casero","caspa","castor","catorce","catre","caudal","causa","cazo","cebolla","ceder","cedro","celda","célebre","celoso","célula","cemento","ceniza","centro","cerca","cerdo","cereza","cero","cerrar","certeza","césped","cetro","chacal","chaleco","champú","chancla","chapa","charla","chico","chiste","chivo","choque","choza","chuleta","chupar","ciclón","ciego","cielo","cien","cierto","cifra","cigarro","cima","cinco","cine","cinta","ciprés","circo","ciruela","cisne","cita","ciudad","clamor","clan","claro","clase","clave","cliente","clima","clínica","cobre","cocción","cochino","cocina","coco","código","codo","cofre","coger","cohete","cojín","cojo","cola","colcha","colegio","colgar","colina","collar","colmo","columna","combate","comer","comida","cómodo","compra","conde","conejo","conga","conocer","consejo","contar","copa","copia","corazón","corbata","corcho","cordón","corona","correr","coser","cosmos","costa","cráneo","cráter","crear","crecer","creído","crema","cría","crimen","cripta","crisis","cromo","crónica","croqueta","crudo","cruz","cuadro","cuarto","cuatro","cubo","cubrir","cuchara","cuello","cuento","cuerda","cuesta","cueva","cuidar","culebra","culpa","culto","cumbre","cumplir","cuna","cuneta","cuota","cupón","cúpula","curar","curioso","curso","curva","cutis","dama","danza","dar","dardo","dátil","deber","débil","década","decir","dedo","defensa","definir","dejar","delfín","delgado","delito","demora","denso","dental","deporte","derecho","derrota","desayuno","deseo","desfile","desnudo","destino","desvío","detalle","detener","deuda","día","diablo","diadema","diamante","diana","diario","dibujo","dictar","diente","dieta","diez","difícil","digno","dilema","diluir","dinero","directo","dirigir","disco","diseño","disfraz","diva","divino","doble","doce","dolor","domingo","don","donar","dorado","dormir","dorso","dos","dosis","dragón","droga","ducha","duda","duelo","dueño","dulce","dúo","duque","durar","dureza","duro","ébano","ebrio","echar","eco","ecuador","edad","edición","edificio","editor","educar","efecto","eficaz","eje","ejemplo","elefante","elegir","elemento","elevar","elipse","élite","elixir","elogio","eludir","embudo","emitir","emoción","empate","empeño","empleo","empresa","enano","encargo","enchufe","encía","enemigo","enero","enfado","enfermo","engaño","enigma","enlace","enorme","enredo","ensayo","enseñar","entero","entrar","envase","envío","época","equipo","erizo","escala","escena","escolar","escribir","escudo","esencia","esfera","esfuerzo","espada","espejo","espía","esposa","espuma","esquí","estar","este","estilo","estufa","etapa","eterno","ética","etnia","evadir","evaluar","evento","evitar","exacto","examen","exceso","excusa","exento","exigir","exilio","existir","éxito","experto","explicar","exponer","extremo","fábrica","fábula","fachada","fácil","factor","faena","faja","falda","fallo","falso","faltar","fama","familia","famoso","faraón","farmacia","farol","farsa","fase","fatiga","fauna","favor","fax","febrero","fecha","feliz","feo","feria","feroz","fértil","fervor","festín","fiable","fianza","fiar","fibra","ficción","ficha","fideo","fiebre","fiel","fiera","fiesta","figura","fijar","fijo","fila","filete","filial","filtro","fin","finca","fingir","finito","firma","flaco","flauta","flecha","flor","flota","fluir","flujo","flúor","fobia","foca","fogata","fogón","folio","folleto","fondo","forma","forro","fortuna","forzar","fosa","foto","fracaso","frágil","franja","frase","fraude","freír","freno","fresa","frío","frito","fruta","fuego","fuente","fuerza","fuga","fumar","función","funda","furgón","furia","fusil","fútbol","futuro","gacela","gafas","gaita","gajo","gala","galería","gallo","gamba","ganar","gancho","ganga","ganso","garaje","garza","gasolina","gastar","gato","gavilán","gemelo","gemir","gen","género","genio","gente","geranio","gerente","germen","gesto","gigante","gimnasio","girar","giro","glaciar","globo","gloria","gol","golfo","goloso","golpe","goma","gordo","gorila","gorra","gota","goteo","gozar","grada","gráfico","grano","grasa","gratis","grave","grieta","grillo","gripe","gris","grito","grosor","grúa","grueso","grumo","grupo","guante","guapo","guardia","guerra","guía","guiño","guion","guiso","guitarra","gusano","gustar","haber","hábil","hablar","hacer","hacha","hada","hallar","hamaca","harina","haz","hazaña","hebilla","hebra","hecho","helado","helio","hembra","herir","hermano","héroe","hervir","hielo","hierro","hígado","higiene","hijo","himno","historia","hocico","hogar","hoguera","hoja","hombre","hongo","honor","honra","hora","hormiga","horno","hostil","hoyo","hueco","huelga","huerta","hueso","huevo","huida","huir","humano","húmedo","humilde","humo","hundir","huracán","hurto","icono","ideal","idioma","ídolo","iglesia","iglú","igual","ilegal","ilusión","imagen","imán","imitar","impar","imperio","imponer","impulso","incapaz","índice","inerte","infiel","informe","ingenio","inicio","inmenso","inmune","innato","insecto","instante","interés","íntimo","intuir","inútil","invierno","ira","iris","ironía","isla","islote","jabalí","jabón","jamón","jarabe","jardín","jarra","jaula","jazmín","jefe","jeringa","jinete","jornada","joroba","joven","joya","juerga","jueves","juez","jugador","jugo","juguete","juicio","junco","jungla","junio","juntar","júpiter","jurar","justo","juvenil","juzgar","kilo","koala","labio","lacio","lacra","lado","ladrón","lagarto","lágrima","laguna","laico","lamer","lámina","lámpara","lana","lancha","langosta","lanza","lápiz","largo","larva","lástima","lata","látex","latir","laurel","lavar","lazo","leal","lección","leche","lector","leer","legión","legumbre","lejano","lengua","lento","leña","león","leopardo","lesión","letal","letra","leve","leyenda","libertad","libro","licor","líder","lidiar","lienzo","liga","ligero","lima","límite","limón","limpio","lince","lindo","línea","lingote","lino","linterna","líquido","liso","lista","litera","litio","litro","llaga","llama","llanto","llave","llegar","llenar","llevar","llorar","llover","lluvia","lobo","loción","loco","locura","lógica","logro","lombriz","lomo","lonja","lote","lucha","lucir","lugar","lujo","luna","lunes","lupa","lustro","luto","luz","maceta","macho","madera","madre","maduro","maestro","mafia","magia","mago","maíz","maldad","maleta","malla","malo","mamá","mambo","mamut","manco","mando","manejar","manga","maniquí","manjar","mano","manso","manta","mañana","mapa","máquina","mar","marco","marea","marfil","margen","marido","mármol","marrón","martes","marzo","masa","máscara","masivo","matar","materia","matiz","matriz","máximo","mayor","mazorca","mecha","medalla","medio","médula","mejilla","mejor","melena","melón","memoria","menor","mensaje","mente","menú","mercado","merengue","mérito","mes","mesón","meta","meter","método","metro","mezcla","miedo","miel","miembro","miga","mil","milagro","militar","millón","mimo","mina","minero","mínimo","minuto","miope","mirar","misa","miseria","misil","mismo","mitad","mito","mochila","moción","moda","modelo","moho","mojar","molde","moler","molino","momento","momia","monarca","moneda","monja","monto","moño","morada","morder","moreno","morir","morro","morsa","mortal","mosca","mostrar","motivo","mover","móvil","mozo","mucho","mudar","mueble","muela","muerte","muestra","mugre","mujer","mula","muleta","multa","mundo","muñeca","mural","muro","músculo","museo","musgo","música","muslo","nácar","nación","nadar","naipe","naranja","nariz","narrar","nasal","natal","nativo","natural","náusea","naval","nave","navidad","necio","néctar","negar","negocio","negro","neón","nervio","neto","neutro","nevar","nevera","nicho","nido","niebla","nieto","niñez","niño","nítido","nivel","nobleza","noche","nómina","noria","norma","norte","nota","noticia","novato","novela","novio","nube","nuca","núcleo","nudillo","nudo","nuera","nueve","nuez","nulo","número","nutria","oasis","obeso","obispo","objeto","obra","obrero","observar","obtener","obvio","oca","ocaso","océano","ochenta","ocho","ocio","ocre","octavo","octubre","oculto","ocupar","ocurrir","odiar","odio","odisea","oeste","ofensa","oferta","oficio","ofrecer","ogro","oído","oír","ojo","ola","oleada","olfato","olivo","olla","olmo","olor","olvido","ombligo","onda","onza","opaco","opción","ópera","opinar","oponer","optar","óptica","opuesto","oración","orador","oral","órbita","orca","orden","oreja","órgano","orgía","orgullo","oriente","origen","orilla","oro","orquesta","oruga","osadía","oscuro","osezno","oso","ostra","otoño","otro","oveja","óvulo","óxido","oxígeno","oyente","ozono","pacto","padre","paella","página","pago","país","pájaro","palabra","palco","paleta","pálido","palma","paloma","palpar","pan","panal","pánico","pantera","pañuelo","papá","papel","papilla","paquete","parar","parcela","pared","parir","paro","párpado","parque","párrafo","parte","pasar","paseo","pasión","paso","pasta","pata","patio","patria","pausa","pauta","pavo","payaso","peatón","pecado","pecera","pecho","pedal","pedir","pegar","peine","pelar","peldaño","pelea","peligro","pellejo","pelo","peluca","pena","pensar","peñón","peón","peor","pepino","pequeño","pera","percha","perder","pereza","perfil","perico","perla","permiso","perro","persona","pesa","pesca","pésimo","pestaña","pétalo","petróleo","pez","pezuña","picar","pichón","pie","piedra","pierna","pieza","pijama","pilar","piloto","pimienta","pino","pintor","pinza","piña","piojo","pipa","pirata","pisar","piscina","piso","pista","pitón","pizca","placa","plan","plata","playa","plaza","pleito","pleno","plomo","pluma","plural","pobre","poco","poder","podio","poema","poesía","poeta","polen","policía","pollo","polvo","pomada","pomelo","pomo","pompa","poner","porción","portal","posada","poseer","posible","poste","potencia","potro","pozo","prado","precoz","pregunta","premio","prensa","preso","previo","primo","príncipe","prisión","privar","proa","probar","proceso","producto","proeza","profesor","programa","prole","promesa","pronto","propio","próximo","prueba","público","puchero","pudor","pueblo","puerta","puesto","pulga","pulir","pulmón","pulpo","pulso","puma","punto","puñal","puño","pupa","pupila","puré","quedar","queja","quemar","querer","queso","quieto","química","quince","quitar","rábano","rabia","rabo","ración","radical","raíz","rama","rampa","rancho","rango","rapaz","rápido","rapto","rasgo","raspa","rato","rayo","raza","razón","reacción","realidad","rebaño","rebote","recaer","receta","rechazo","recoger","recreo","recto","recurso","red","redondo","reducir","reflejo","reforma","refrán","refugio","regalo","regir","regla","regreso","rehén","reino","reír","reja","relato","relevo","relieve","relleno","reloj","remar","remedio","remo","rencor","rendir","renta","reparto","repetir","reposo","reptil","res","rescate","resina","respeto","resto","resumen","retiro","retorno","retrato","reunir","revés","revista","rey","rezar","rico","riego","rienda","riesgo","rifa","rígido","rigor","rincón","riñón","río","riqueza","risa","ritmo","rito","rizo","roble","roce","rociar","rodar","rodeo","rodilla","roer","rojizo","rojo","romero","romper","ron","ronco","ronda","ropa","ropero","rosa","rosca","rostro","rotar","rubí","rubor","rudo","rueda","rugir","ruido","ruina","ruleta","rulo","rumbo","rumor","ruptura","ruta","rutina","sábado","saber","sabio","sable","sacar","sagaz","sagrado","sala","saldo","salero","salir","salmón","salón","salsa","salto","salud","salvar","samba","sanción","sandía","sanear","sangre","sanidad","sano","santo","sapo","saque","sardina","sartén","sastre","satán","sauna","saxofón","sección","seco","secreto","secta","sed","seguir","seis","sello","selva","semana","semilla","senda","sensor","señal","señor","separar","sepia","sequía","ser","serie","sermón","servir","sesenta","sesión","seta","setenta","severo","sexo","sexto","sidra","siesta","siete","siglo","signo","sílaba","silbar","silencio","silla","símbolo","simio","sirena","sistema","sitio","situar","sobre","socio","sodio","sol","solapa","soldado","soledad","sólido","soltar","solución","sombra","sondeo","sonido","sonoro","sonrisa","sopa","soplar","soporte","sordo","sorpresa","sorteo","sostén","sótano","suave","subir","suceso","sudor","suegra","suelo","sueño","suerte","sufrir","sujeto","sultán","sumar","superar","suplir","suponer","supremo","sur","surco","sureño","surgir","susto","sutil","tabaco","tabique","tabla","tabú","taco","tacto","tajo","talar","talco","talento","talla","talón","tamaño","tambor","tango","tanque","tapa","tapete","tapia","tapón","taquilla","tarde","tarea","tarifa","tarjeta","tarot","tarro","tarta","tatuaje","tauro","taza","tazón","teatro","techo","tecla","técnica","tejado","tejer","tejido","tela","teléfono","tema","temor","templo","tenaz","tender","tener","tenis","tenso","teoría","terapia","terco","término","ternura","terror","tesis","tesoro","testigo","tetera","texto","tez","tibio","tiburón","tiempo","tienda","tierra","tieso","tigre","tijera","tilde","timbre","tímido","timo","tinta","tío","típico","tipo","tira","tirón","titán","títere","título","tiza","toalla","tobillo","tocar","tocino","todo","toga","toldo","tomar","tono","tonto","topar","tope","toque","tórax","torero","tormenta","torneo","toro","torpedo","torre","torso","tortuga","tos","tosco","toser","tóxico","trabajo","tractor","traer","tráfico","trago","traje","tramo","trance","trato","trauma","trazar","trébol","tregua","treinta","tren","trepar","tres","tribu","trigo","tripa","triste","triunfo","trofeo","trompa","tronco","tropa","trote","trozo","truco","trueno","trufa","tubería","tubo","tuerto","tumba","tumor","túnel","túnica","turbina","turismo","turno","tutor","ubicar","úlcera","umbral","unidad","unir","universo","uno","untar","uña","urbano","urbe","urgente","urna","usar","usuario","útil","utopía","uva","vaca","vacío","vacuna","vagar","vago","vaina","vajilla","vale","válido","valle","valor","válvula","vampiro","vara","variar","varón","vaso","vecino","vector","vehículo","veinte","vejez","vela","velero","veloz","vena","vencer","venda","veneno","vengar","venir","venta","venus","ver","verano","verbo","verde","vereda","verja","verso","verter","vía","viaje","vibrar","vicio","víctima","vida","vídeo","vidrio","viejo","viernes","vigor","vil","villa","vinagre","vino","viñedo","violín","viral","virgo","virtud","visor","víspera","vista","vitamina","viudo","vivaz","vivero","vivir","vivo","volcán","volumen","volver","voraz","votar","voto","voz","vuelo","vulgar","yacer","yate","yegua","yema","yerno","yeso","yodo","yoga","yogur","zafiro","zanja","zapato","zarza","zona","zorro","zumo","zurdo"];
+const $=id=>document.getElementById(id);
+const state={words:5,digits:2,sepMode:'fixed',protocol:'wpa2',charset:95,quiz:'word'};
+const speeds={wpa2:{value:'367400',unit:'1'},netntlmv2:{value:'1576.1',unit:'1000000'}};
+const WORDPOOL=[...new Set(WORDS.map(w=>w.normalize('NFC')))];
+const plainify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').normalize('NFC');
+const PLAINPOOL=[...new Set(WORDS.map(plainify))];
+const fmt=(x,d=1)=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:d}).format(x);
+let current=[];
+function rand(n){const a=new Uint32Array(1),m=Math.floor(4294967296/n)*n;let x;do{crypto.getRandomValues(a);x=a[0]}while(x>=m);return x%n}
+function segments(id,key,fn=generate){$(id).addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;state[key]=['words','digits','charset'].includes(key)?Number(b.dataset.v):b.dataset.v;$(id).querySelectorAll('button[data-v]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fn()})}
+segments('words','words');segments('digits','digits');segments('sepMode','sepMode');segments('protocols','protocol',()=>{syncSpeed();renderLab()});segments('charsets','charset',renderLab);segments('quizTabs','quiz',renderQuiz);
+function options(){return {words:state.words,digits:state.digits,cap:$('useCap').checked,plain:$('plain').checked,num:$('useNum').checked,sym:$('useSym').checked,fixed:state.sepMode==='fixed',syms:[...new Set([...$('symSet').value.replace(/\s/g,'')])],pool:$('plain').checked?PLAINPOOL:WORDPOOL}}
+function count(){let v=parseInt($('count').value,10);if(!Number.isFinite(v))v=1;v=Math.max(1,Math.min(50,v));$('count').value=v;return v}
+function valid(o){return !o.sym||o.fixed||o.syms.length>0}
+function make(o){const p=[],pos=o.num?rand(o.words):-1;for(let i=0;i<o.words;i++){let w=o.pool[rand(o.pool.length)];if(o.cap)w=w.charAt(0).toUpperCase()+w.slice(1);p.push({t:'w',v:w});if(i===pos){let digits='';for(let k=0;k<o.digits;k++)digits+=rand(10);p.push({t:'n',v:digits})}if(o.sym&&i<o.words-1)p.push({t:'s',v:o.fixed?'.':o.syms[rand(o.syms.length)]})}return p}
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const render=p=>p.map(x=>`<span class="${x.t}">${esc(x.v)}</span>`).join('');
+const plainText=p=>p.map(x=>x.v).join('');
+function combinations(o){let c=BigInt(o.pool.length)**BigInt(o.words);if(o.sym&&!o.fixed)c*=BigInt(o.syms.length)**BigInt(o.words-1);if(o.num)c*=10n**BigInt(o.digits)*BigInt(o.words);return c}
+function entropy(o){let b=o.words*Math.log2(o.pool.length);if(o.sym&&!o.fixed)b+=(o.words-1)*Math.log2(o.syms.length);if(o.num)b+=o.digits*Math.log2(10)+Math.log2(o.words);return b}
+function speed(){const s=speeds[state.protocol],n=Number(String(s.value).trim().replace(',','.'));return s.value.trim()&&Number.isFinite(n)&&n>0?n*Number(s.unit):null}
+function humanTime(seconds){if(seconds===null||!Number.isFinite(seconds)||seconds<0)return 'sin estimación';if(seconds<1)return 'menos de un segundo';if(seconds<60)return `${fmt(seconds,1)} segundos`;if(seconds<3600)return `${fmt(seconds/60,1)} minutos`;if(seconds<86400)return `${fmt(seconds/3600,1)} horas`;if(seconds<31557600)return `${fmt(seconds/86400,1)} días`;return `${fmt(seconds/31557600,2)} años`}
+function sync(){const o=options();$('separatorControls').hidden=!o.sym;$('symBox').hidden=!o.sym||o.fixed;$('symErr').hidden=valid(o);$('numBox').hidden=!o.num}
+function generate(){sync();const o=options();if(!valid(o)){$('featured').textContent='Selecciona algún símbolo permitido.';$('list').innerHTML='';current=[];$('copyFeatured').disabled=true;$('copyAll').disabled=true;$('strBits').textContent='—';$('wifiValidity').textContent='Corrige los símbolos antes de generar.';renderLab();return}const n=count();current=Array.from({length:n},()=>make(o));$('featured').innerHTML=render(current[0]);$('copyFeatured').disabled=false;$('copyAll').disabled=false;$('list').innerHTML=current.slice(1).map((p,i)=>`<li><span class="number">${String(i+2).padStart(2,'0')}</span><div class="pw">${render(p)}</div><button type="button" class="copymini" data-i="${i+1}" aria-label="Copiar propuesta ${i+2}">Copiar</button></li>`).join('');$('othersPanel').hidden=n===1;$('strBits').textContent=`≈ ${fmt(entropy(o),1)} bits`;$('strLabel').textContent=state.words>=4?'de incertidumbre generada':'· mejor añadir palabras';const notWifi=current.map(plainText).filter(s=>{const b=new TextEncoder().encode(s).length;return b<8||b>63||!/^[\x20-\x7e]+$/.test(s)}).length;$('wifiValidity').textContent=notWifi?`${notWifi} de ${n} propuestas podrían no ser válidas como frase WPA2-PSK (8–63 caracteres ASCII).`:'Compatible con el formato habitual de WPA2-PSK: 8–63 caracteres ASCII imprimibles. No implica que un router concreto acepte todos los símbolos.';$('wifiValidity').classList.toggle('warn',notWifi>0);renderLab()}
+function renderQuiz(){const data={capital:{title:'No todas las mayúsculas añaden azar.',text:'Si sabes que la primera letra de cada palabra siempre va en mayúscula, puedes aplicar esa regla a todos los intentos. La contraseña se ve distinta, pero el número de combinaciones no crece.',number:'+ 0 bits',note:'cuando la regla es siempre la misma'},dot:{title:'Un punto fijo es una decisión de formato.',text:'Separar cada palabra con un punto puede facilitar el dictado. Si el separador es conocido y constante, no añade combinaciones. La comodidad no tiene por qué ser enemiga de la seguridad.',number:'+ 0 bits',note:'si el punto es predecible'},word:{title:'Una palabra cambia la escala.',text:'Cada palabra adicional, escogida de forma independiente entre 2.048 opciones, multiplica el número de frases posibles por 2.048. Eso equivale a unos 11 bits más de azar.',number:'× 2.048',note:'combinaciones por cada palabra extra'}};const x=data[state.quiz];$('quizTitle').textContent=x.title;$('quizText').textContent=x.text;$('quizNumber').textContent=x.number;$('quizNote').textContent=x.note}
+function renderLab(){const o=options(),s=speed(),c=valid(o)?combinations(o):0n;let cbr=BigInt(state.charset)**12n;$('phraseCombos').textContent=c.toLocaleString('es-ES');$('phraseTime').textContent=s&&valid(o)?humanTime(Number(c)/s):'sin estimación';$('phraseAvg').textContent=s&&valid(o)?humanTime(Number(c)/s/2):'—';$('phraseProtocol').textContent=state.protocol==='wpa2'?'WPA2-PBKDF2 · 22000':'NetNTLMv2 · 5600';$('bruteTime').textContent=s?humanTime(Number(cbr)/s):'sin estimación';$('bruteCombos').textContent=cbr.toLocaleString('es-ES');$('bruteBits').textContent=`${fmt(12*Math.log2(state.charset),1)} bits`;$('speedLabel').textContent=s?fmt(s,0)+' H/s':'velocidad no válida'}
+function syncSpeed(){const s=speeds[state.protocol];$('speedValue').value=s.value;$('speedUnit').value=s.unit;$('speedInfo').textContent=state.protocol==='wpa2'?'WPA2 · 367.400 H/s observados en tu sesión de laboratorio (dos registros EAPOL).':'NetNTLMv2 · 1.576,1 MH/s, benchmark Hashcat -m 5600 con kernel optimizado.'}
+async function copy(value,button,label){let ok=false;try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(value);ok=true}}catch(_){}if(!ok){try{let t=document.createElement('textarea');t.value=value;t.style.position='fixed';t.style.top='-300px';document.body.appendChild(t);t.focus();t.select();ok=document.execCommand('copy');t.remove()}catch(_){}}const old=button.textContent;button.textContent=ok?'Copiado ✓':'No se pudo copiar';$('copyMessage').textContent=button.textContent;setTimeout(()=>button.textContent=old,1500)}
+$('go').onclick=generate;$('copyFeatured').onclick=e=>{if(current[0])copy(plainText(current[0]),e.currentTarget)};$('copyAll').onclick=e=>copy(current.map(plainText).join('\n'),e.currentTarget);$('list').onclick=e=>{const b=e.target.closest('button[data-i]');if(b){const x=current[Number(b.dataset.i)];if(x)copy(plainText(x),b)}};
+$('minus').onclick=()=>{$('count').value=Math.max(1,count()-1);generate()};$('plus').onclick=()=>{$('count').value=Math.min(50,count()+1);generate()};$('count').onchange=generate;
+['useSym','useNum','useCap','plain'].forEach(id=>$(id).onchange=generate);$('symSet').oninput=generate;
+$('whyEntropy').onclick=()=>{const p=$('entropyNote');p.hidden=!p.hidden;$('whyEntropy').setAttribute('aria-expanded',String(!p.hidden))};
+$('speedValue').oninput=e=>{speeds[state.protocol].value=e.target.value;renderLab()};$('speedUnit').onchange=e=>{speeds[state.protocol].unit=e.target.value;renderLab()};$('resetSpeed').onclick=()=>{speeds.wpa2={value:'367400',unit:'1'};speeds.netntlmv2={value:'1576.1',unit:'1000000'};syncSpeed();renderLab()};
+function setSkin(s){document.documentElement.dataset.skin=s;$('skinLectura').setAttribute('aria-pressed',String(s==='lectura'));$('skinOmarchy').setAttribute('aria-pressed',String(s==='omarchy'));document.querySelector('meta[name="theme-color"]').content=s==='lectura'?'#f6f4ec':'#121512'}
+$('skinLectura').onclick=()=>setSkin('lectura');$('skinOmarchy').onclick=()=>setSkin('omarchy');
+$('textSize').onclick=()=>{const large=document.documentElement.dataset.size!=='large';document.documentElement.dataset.size=large?'large':'normal';$('textSize').textContent=large?'A−':'A+';$('textSize').title=large?'Volver al tamaño normal':'Aumentar la letra';$('textSize').setAttribute('aria-label',large?'Reducir el tamaño del texto':'Aumentar el tamaño del texto')};
+syncSpeed();renderQuiz();generate();
+</script>
+</body>
+</html>
